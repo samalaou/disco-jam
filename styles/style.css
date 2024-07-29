@@ -32,3 +32,8 @@ body {
     width: 50px; /* Set a fixed size for the player for now */
     height: 50px; /* Set a fixed size for the player for now */
 }
+
+.obstacle {
+    position: absolute;
+    background-color: green;
+}

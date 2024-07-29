@@ -1,3 +1,5 @@
+const NUM_OF_OBSTACLES = 5;
+
 class Player {
     constructor(container) {
         this.position = { x: 0, y: 0 };
@@ -55,9 +57,59 @@ class Player {
     }
 }
 
+class Obstacles {
+    constructor(container, numObstacles) {
+        this.container = container;
+        this.numObstacles = numObstacles;
+        this.obstacles = [];
+        this.updateContainerDimensions();
+
+        this.createObstacles();
+    }
+
+    updateContainerDimensions() {
+        const containerRect = this.container.getBoundingClientRect();
+        this.containerWidthVW = containerRect.width / window.innerWidth * 100; // Convert to vw
+        this.containerHeightVH = containerRect.height / window.innerHeight * 100; // Convert to vh
+    }
+
+    createObstacles() {
+        for (let i = 0; i < this.numObstacles; i++) {
+            const obstacle = new Obstacle(this.container, this.containerWidthVW, this.containerHeightVH);
+            this.obstacles.push(obstacle);
+        }
+    }
+}
+
+class Obstacle {
+    constructor(container, containerWidthVW, containerHeightVH) {
+        this.container = container;
+        this.containerWidthVW = containerWidthVW;
+        this.containerHeightVH = containerHeightVH;
+        this.widthVW = 5;
+        this.heightVH = 5;
+        this.positionXVW = Math.floor(Math.random() * (this.containerWidthVW - this.widthVW));
+        this.positionYVH = Math.floor(Math.random() * (this.containerHeightVH - this.heightVH));
+
+        this.createDomElement();
+    }
+
+    createDomElement() {
+        this.domElement = document.createElement("div");
+        this.domElement.className = "obstacle";
+        this.domElement.style.width = `${this.widthVW}vw`;
+        this.domElement.style.height = `${this.heightVH}vh`;
+        this.domElement.style.left = `${this.positionXVW}vw`;
+        this.domElement.style.top = `${this.positionYVH}vh`;
+
+        this.container.appendChild(this.domElement);
+    }
+}
+
 // Setup
 const container = document.querySelector('.container');
 const player = new Player(container);
+const obstacles = new Obstacles(container, NUM_OF_OBSTACLES);
 
 document.addEventListener('keydown', (e) => {
     player.handleKeyDown(e);
