@@ -37,3 +37,7 @@ body {
     position: absolute;
     background-color: green;
 }
+
+.goal {
+    position: absolute;
+}

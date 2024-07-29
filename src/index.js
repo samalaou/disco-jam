@@ -131,9 +131,27 @@ class Obstacle {
 }
 
 
+class Goal extends Obstacle {
+    constructor(container, containerWidthVW, containerHeightVH) {
+        super(container, containerWidthVW, containerHeightVH);
+
+        this.positionXVW = (containerWidthVW - this.widthVW) / 2; // Center horizontally
+        this.positionYVH = containerHeightVH - this.heightVH; // Position at the bottom
+
+        this.createDomElement();
+        this.domElement.style.backgroundColor = 'red';
+        this.domElement.id = "goal";
+
+    }
+}
+
 // Setup
 const container = document.querySelector('.container');
 const obstacles = new Obstacles(container, NUM_OF_OBSTACLES);
+const goal = new Goal(container, obstacles.containerWidthVW, obstacles.containerHeightVH);
+
+obstacles.obstacles.push(goal);
+
 const player = new Player(container, obstacles.obstacles);
 
 document.addEventListener('keydown', (e) => {
