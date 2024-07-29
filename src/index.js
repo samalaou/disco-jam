@@ -5,7 +5,7 @@ class Player {
         this.position = { x: 0, y: 0 };
         this.container = container;
         this.obstacles = obstacles;
-        this.initializeElement();
+        this.createDomElement();
 
         // Get container dimensions and player size
         const containerRect = container.getBoundingClientRect();
@@ -24,7 +24,7 @@ class Player {
         };
     }
 
-    initializeElement() {
+    createDomElement() {
         this.element = document.createElement('div');
         this.element.classList.add('player');
         this.container.appendChild(this.element);
@@ -70,7 +70,11 @@ class Player {
     checkCollisions() {
         this.obstacles.forEach(obstacle => {
             if (this.isColliding(obstacle)) {
-                console.log("Game Over!");
+                if (obstacle instanceof Goal){
+                    console.log("You reached the Goal!")
+                } else {
+                    console.log("Game Over!");
+                }
                 return; // Exit the function after detecting collision
             }
         });
@@ -119,14 +123,14 @@ class Obstacle {
     }
 
     createDomElement() {
-        this.domElement = document.createElement("div");
-        this.domElement.className = "obstacle";
-        this.domElement.style.width = `${this.widthVW}vw`;
-        this.domElement.style.height = `${this.heightVH}vh`;
-        this.domElement.style.left = `${this.positionXVW}vw`;
-        this.domElement.style.top = `${this.positionYVH}vh`;
+        this.element = document.createElement("div");
+        this.element.className = "obstacle";
+        this.element.style.width = `${this.widthVW}vw`;
+        this.element.style.height = `${this.heightVH}vh`;
+        this.element.style.left = `${this.positionXVW}vw`;
+        this.element.style.top = `${this.positionYVH}vh`;
 
-        this.container.appendChild(this.domElement);
+        this.container.appendChild(this.element);
     }
 }
 
@@ -139,8 +143,9 @@ class Goal extends Obstacle {
         this.positionYVH = containerHeightVH - this.heightVH; // Position at the bottom
 
         this.createDomElement();
-        this.domElement.style.backgroundColor = 'red';
-        this.domElement.id = "goal";
+
+        this.element.style.backgroundColor = 'red';
+        this.element.id = "goal";
 
     }
 }
