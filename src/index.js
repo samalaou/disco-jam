@@ -1,19 +1,20 @@
 const NUM_OF_OBSTACLES = 5;
 
 class Player {
-    constructor(container) {
+    constructor(container, obstacles) {
         this.position = { x: 0, y: 0 };
         this.container = container;
+        this.obstacles = obstacles;
         this.initializeElement();
 
         // Get container dimensions and player size
         const containerRect = container.getBoundingClientRect();
-        this.containerWidth = containerRect.width;
-        this.containerHeight = containerRect.height;
+        this.containerWidthVW = containerRect.width / window.innerWidth * 100; // Convert to vw
+        this.containerHeightVH = containerRect.height / window.innerHeight * 100; // Convert to vh
 
         const playerRect = this.element.getBoundingClientRect();
-        this.playerWidth = playerRect.width;
-        this.playerHeight = playerRect.height;
+        this.playerWidthVW = playerRect.width / window.innerWidth * 100; // Convert to vw
+        this.playerHeightVH = playerRect.height / window.innerHeight * 100; // Convert to vh
 
         this.directions = {
             'ArrowUp': () => this.move(0, -1),
@@ -34,13 +35,14 @@ class Player {
         const newY = this.position.y + dy;
 
         // Ensure the player stays within the container
-        const withinBoundsX = newX >= 0 && newX + this.playerWidth <= this.containerWidth;
-        const withinBoundsY = newY >= 0 && newY + this.playerHeight <= this.containerHeight;
+        const withinBoundsX = newX >= 0 && newX + this.playerWidthVW <= this.containerWidthVW;
+        const withinBoundsY = newY >= 0 && newY + this.playerHeightVH <= this.containerHeightVH;
 
         if (withinBoundsX && withinBoundsY) {
             this.position.x = newX;
             this.position.y = newY;
             this.updatePosition();
+            this.checkCollisions();
         }
     }
 
@@ -55,7 +57,28 @@ class Player {
             moveFunction();
         }
     }
+
+    isColliding(obstacle) {
+        return (
+            this.position.x < obstacle.positionXVW + obstacle.widthVW &&
+            this.position.x + this.playerWidthVW > obstacle.positionXVW &&
+            this.position.y < obstacle.positionYVH + obstacle.heightVH &&
+            this.position.y + this.playerHeightVH > obstacle.positionYVH
+        );
+    }
+
+    checkCollisions() {
+        this.obstacles.forEach(obstacle => {
+            if (this.isColliding(obstacle)) {
+                console.log("Game Over!");
+                return; // Exit the function after detecting collision
+            }
+        });
+    }
+
+
 }
+
 
 class Obstacles {
     constructor(container, numObstacles) {
@@ -80,6 +103,7 @@ class Obstacles {
         }
     }
 }
+
 
 class Obstacle {
     constructor(container, containerWidthVW, containerHeightVH) {
@@ -106,10 +130,11 @@ class Obstacle {
     }
 }
 
+
 // Setup
 const container = document.querySelector('.container');
-const player = new Player(container);
 const obstacles = new Obstacles(container, NUM_OF_OBSTACLES);
+const player = new Player(container, obstacles.obstacles);
 
 document.addEventListener('keydown', (e) => {
     player.handleKeyDown(e);
