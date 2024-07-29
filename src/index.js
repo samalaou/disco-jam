@@ -1,10 +1,12 @@
 const NUM_OF_OBSTACLES = 5;
+const GAME_DURATION = 6;
 
 class Player {
     constructor(container, obstacles) {
         this.position = { x: 0, y: 0 };
         this.container = container;
         this.obstacles = obstacles;
+        this.isAllowedToMove = false;
         this.createDomElement();
 
         // Get container dimensions and player size
@@ -73,7 +75,7 @@ class Player {
                 if (obstacle instanceof Goal){
                     console.log("You reached the Goal!")
                 } else {
-                    console.log("Game Over!");
+                    GameOver();
                 }
                 return; // Exit the function after detecting collision
             }
@@ -162,3 +164,40 @@ const player = new Player(container, obstacles.obstacles);
 document.addEventListener('keydown', (e) => {
     player.handleKeyDown(e);
 });
+
+const startButton = document.getElementById('startButton');
+const timeRemaining = document.querySelector('#timeRemaining span');
+
+let timer;
+let time = GAME_DURATION;
+
+function startTimer() {
+    updateTimeDisplay();
+    timer = setInterval(() => {
+        time--;
+        updateTimeDisplay();
+        if (time <= 0) {
+            GameOver()
+        }
+    }, 1000);
+}
+
+function startGame(){
+    player.isAllowedToMove = true;
+    startTimer()
+}
+function updateTimeDisplay() {
+    const minutes = Math.floor(time / 60).toString().padStart(2, "0");
+    const seconds = (time % 60).toString().padStart(2, "0");
+    timeRemaining.innerText = `${minutes}:${seconds}`;
+}
+
+
+startButton.addEventListener('click', startGame);
+
+function GameOver(){
+    clearInterval(timer);
+    player.isAllowedToMove = false
+    console.log('Game Over!')
+}
+
