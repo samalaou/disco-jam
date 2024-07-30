@@ -1,5 +1,8 @@
 const NUM_OF_OBSTACLES = 5;
-const GAME_DURATION = 6;
+const GAME_DURATION = 20;
+const BPM = 82;
+const BEAT_INTERVAL = (60 / BPM) * 1000;
+const BEAT_WINDOW = 200; // Allowable window around the beat
 
 class Player {
     constructor(container, obstacles) {
@@ -10,14 +13,14 @@ class Player {
         this.createDomElement();
 
         // Get container dimensions and player size
-        const containerRect = container.getBoundingClientRect();
+        const containerRect = this.container.getBoundingClientRect();
         this.containerWidthVW = containerRect.width / window.innerWidth * 100; // Convert to vw
         this.containerHeightVH = containerRect.height / window.innerHeight * 100; // Convert to vh
 
         const playerRect = this.element.getBoundingClientRect();
         this.playerWidthVW = playerRect.width / window.innerWidth * 100; // Convert to vw
         this.playerHeightVH = playerRect.height / window.innerHeight * 100; // Convert to vh
-
+    
         this.directions = {
             'ArrowUp': () => this.move(0, -1),
             'ArrowDown': () => this.move(0, 1),
@@ -162,11 +165,16 @@ obstacles.obstacles.push(goal);
 const player = new Player(container, obstacles.obstacles);
 
 document.addEventListener('keydown', (e) => {
-    player.handleKeyDown(e);
+    const currentTime = Date.now();
+    const timeSinceLastBeat = currentTime - lastBeatTime;
+    if (timeSinceLastBeat < BEAT_WINDOW || timeSinceLastBeat > BEAT_INTERVAL - BEAT_WINDOW) {
+        player.handleKeyDown(e);
+    }
 });
 
 const startButton = document.getElementById('startButton');
 const timeRemaining = document.querySelector('#timeRemaining span');
+const gameMusic = document.getElementById('gameMusic');
 
 let timer;
 let time = GAME_DURATION;
@@ -184,7 +192,9 @@ function startTimer() {
 
 function startGame(){
     player.isAllowedToMove = true;
-    startTimer()
+    gameMusic.play();
+    startTimer();
+    trackBeats();
 }
 function updateTimeDisplay() {
     const minutes = Math.floor(time / 60).toString().padStart(2, "0");
@@ -197,7 +207,16 @@ startButton.addEventListener('click', startGame);
 
 function GameOver(){
     clearInterval(timer);
+    clearInterval(beatTracker);
     player.isAllowedToMove = false
+    gameMusic.pause()
     console.log('Game Over!')
 }
 
+let beatTracker;
+
+function trackBeats() {
+    beatTracker = setInterval(() => {
+        lastBeatTime = Date.now();
+    }, BEAT_INTERVAL);
+}
