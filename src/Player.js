@@ -73,7 +73,6 @@ class Player {
     }
 
     checkCollisions() {
-        console.log(111)
         this.obstacles.forEach(obstacle => {
             if (this.isColliding(obstacle)) {
                 if (obstacle instanceof Goal){

@@ -3,6 +3,7 @@ const GAME_DURATION = 60;
 const BPM = 82;
 const BEAT_INTERVAL = (60 / BPM) * 1000;
 const BEAT_WINDOW = 200; // Allowable window around the beat
+const MISSED_BEAT_PENALTY = 5;
 
 class Game {
     constructor() {
@@ -13,6 +14,7 @@ class Game {
         this.finalScreen = document.querySelector('.final-screen');
         this.finalMessage = document.querySelector('#final-message');
 
+        this.directionKeys = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
         this.timeRemaining = GAME_DURATION;
         this.isGameActive = false;
         this.timer = null;
@@ -93,15 +95,32 @@ class Game {
         if (!this.isGameActive || !this.player.isAllowedToMove) {
             return;
         }
-        if (this.isWithinBeatWindow()) {
-            this.player.handleKeyDown(e);
-        }
+
+        if (this.directionKeys.includes(e.code)) {
+            if (this.isWithinBeatWindow()) {
+                this.player.handleKeyDown(e);
+            } else {
+                this.applyMissedBeatPenalty();
+            }
+        } 
     }
 
     isWithinBeatWindow() {
         const currentTime = Date.now();
         const timeSinceLastBeat = currentTime - this.lastBeatTime;
         return timeSinceLastBeat < BEAT_WINDOW || timeSinceLastBeat > BEAT_INTERVAL - BEAT_WINDOW;
+    }
+
+    applyMissedBeatPenalty() {
+        this.timeRemaining -= MISSED_BEAT_PENALTY;
+        if (this.timeRemaining < 0) {
+            this.timeRemaining = 0;
+        }
+        this.updateTimeDisplay();
+
+        if (this.timeRemaining <= 0) {
+            this.handleGameOver();
+        }
     }
 
     endGame() {
