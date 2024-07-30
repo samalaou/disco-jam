@@ -214,11 +214,33 @@ class Game {
     }
 
     handleKeyDown(e) {
+        if (e.code === "Space"){
+            this.startGame()
+        }
         const currentTime = Date.now();
         const timeSinceLastBeat = currentTime - this.lastBeatTime;
         if (timeSinceLastBeat < BEAT_WINDOW || timeSinceLastBeat > BEAT_INTERVAL - BEAT_WINDOW) {
             this.player.handleKeyDown(e);
         }
+    }
+
+    handleKeyDown(e) {
+        if (e.code === "Space") {
+            this.startGame();
+            return;
+        }
+        if (!this.isGameActive || !this.player.isAllowedToMove) {
+            return;
+        }
+        if (this.isWithinBeatWindow()) {
+            this.player.handleKeyDown(e);
+        }
+    }
+
+    isWithinBeatWindow() {
+        const currentTime = Date.now();
+        const timeSinceLastBeat = currentTime - this.lastBeatTime;
+        return timeSinceLastBeat < BEAT_WINDOW || timeSinceLastBeat > BEAT_INTERVAL - BEAT_WINDOW;
     }
 
     gameOver() {
