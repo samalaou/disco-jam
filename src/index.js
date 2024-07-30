@@ -10,16 +10,12 @@ class Player {
         this.container = container;
         this.obstacles = obstacles;
         this.isAllowedToMove = false;
+        this.containerWidthVW = null;
+        this.containerHeightVH = null;
+        this.playerWidthVW = null;
+        this.playerHeightVH = null;
         this.createDomElement();
-
-        // Get container dimensions and player size
-        const containerRect = this.container.getBoundingClientRect();
-        this.containerWidthVW = containerRect.width / window.innerWidth * 100; // Convert to vw
-        this.containerHeightVH = containerRect.height / window.innerHeight * 100; // Convert to vh
-
-        const playerRect = this.element.getBoundingClientRect();
-        this.playerWidthVW = playerRect.width / window.innerWidth * 100; // Convert to vw
-        this.playerHeightVH = playerRect.height / window.innerHeight * 100; // Convert to vh
+        this.updateDimensions();
     
         this.directions = {
             'ArrowUp': () => this.move(0, -1),
@@ -27,6 +23,16 @@ class Player {
             'ArrowLeft': () => this.move(-1, 0),
             'ArrowRight': () => this.move(1, 0)
         };
+    }
+
+    updateDimensions() {
+        const containerRect = this.container.getBoundingClientRect();
+        this.containerWidthVW = containerRect.width / window.innerWidth * 100; // Convert to vw
+        this.containerHeightVH = containerRect.height / window.innerHeight * 100; // Convert to vh
+
+        const playerRect = this.element.getBoundingClientRect();
+        this.playerWidthVW = playerRect.width / window.innerWidth * 100; // Convert to vw
+        this.playerHeightVH = playerRect.height / window.innerHeight * 100; // Convert to vh
     }
 
     createDomElement() {
@@ -78,7 +84,7 @@ class Player {
                 if (obstacle instanceof Goal){
                     console.log("You reached the Goal!")
                 } else {
-                    GameOver();
+                    game.gameOver();
                 }
                 return; // Exit the function after detecting collision
             }
@@ -155,68 +161,81 @@ class Goal extends Obstacle {
     }
 }
 
-// Setup
-const container = document.querySelector('.container');
-const obstacles = new Obstacles(container, NUM_OF_OBSTACLES);
-const goal = new Goal(container, obstacles.containerWidthVW, obstacles.containerHeightVH);
 
-obstacles.obstacles.push(goal);
+class Game {
+    constructor() {
+        this.container = document.querySelector('.container');
+        this.startButton = document.getElementById('startButton');
+        this.timeDisplay = document.querySelector('#timeRemaining span');
+        this.gameMusic = document.getElementById('gameMusic');
 
-const player = new Player(container, obstacles.obstacles);
+        this.timeRemaining = GAME_DURATION;
+        this.isGameActive = false;
+        this.timer = null;
+        this.player = null;
+        this.obstacles = null;
+        this.goal = null;
+        this.beatTracker = null;
+        this.lastBeatTime = 0;
 
-document.addEventListener('keydown', (e) => {
-    const currentTime = Date.now();
-    const timeSinceLastBeat = currentTime - lastBeatTime;
-    if (timeSinceLastBeat < BEAT_WINDOW || timeSinceLastBeat > BEAT_INTERVAL - BEAT_WINDOW) {
-        player.handleKeyDown(e);
+        this.obstacles = new Obstacles(this.container, NUM_OF_OBSTACLES);
+        this.goal = new Goal(this.container, this.obstacles.containerWidthVW, this.obstacles.containerHeightVH);
+        this.obstacles.obstacles.push(this.goal);
+        this.player = new Player(this.container, this.obstacles.obstacles);
+
+        this.startButton.addEventListener('click', () => this.startGame());
+        document.addEventListener('keydown', (e) => this.handleKeyDown(e));
     }
-});
 
-const startButton = document.getElementById('startButton');
-const timeRemaining = document.querySelector('#timeRemaining span');
-const gameMusic = document.getElementById('gameMusic');
+    startGame() {
+        if (this.isGameActive) return;
 
-let timer;
-let time = GAME_DURATION;
+        this.isGameActive = true;
+        this.player.isAllowedToMove = true;
+        this.gameMusic.play();
+        this.startTimer();
+        this.trackBeats();
+    }
 
-function startTimer() {
-    updateTimeDisplay();
-    timer = setInterval(() => {
-        time--;
-        updateTimeDisplay();
-        if (time <= 0) {
-            GameOver()
+    startTimer() {
+        this.updateTimeDisplay();
+        this.timer = setInterval(() => {
+            this.timeRemaining--;
+            this.updateTimeDisplay();
+            if (this.timeRemaining <= 0) {
+                this.gameOver();
+            }
+        }, 1000);
+    }
+
+    updateTimeDisplay() {
+        const minutes = Math.floor(this.timeRemaining / 60).toString().padStart(2, "0");
+        const seconds = (this.timeRemaining % 60).toString().padStart(2, "0");
+        this.timeDisplay.innerText = `${minutes}:${seconds}`;
+    }
+
+    trackBeats() {
+        this.beatTracker = setInterval(() => {
+            this.lastBeatTime = Date.now();
+        }, BEAT_INTERVAL);
+    }
+
+    handleKeyDown(e) {
+        const currentTime = Date.now();
+        const timeSinceLastBeat = currentTime - this.lastBeatTime;
+        if (timeSinceLastBeat < BEAT_WINDOW || timeSinceLastBeat > BEAT_INTERVAL - BEAT_WINDOW) {
+            this.player.handleKeyDown(e);
         }
-    }, 1000);
+    }
+
+    gameOver() {
+        clearInterval(this.timer);
+        clearInterval(this.beatTracker);
+        this.player.isAllowedToMove = false;
+        this.gameMusic.pause();
+        this.isGameActive = false;
+        console.log('Game Over!');
+    }
 }
 
-function startGame(){
-    player.isAllowedToMove = true;
-    gameMusic.play();
-    startTimer();
-    trackBeats();
-}
-function updateTimeDisplay() {
-    const minutes = Math.floor(time / 60).toString().padStart(2, "0");
-    const seconds = (time % 60).toString().padStart(2, "0");
-    timeRemaining.innerText = `${minutes}:${seconds}`;
-}
-
-
-startButton.addEventListener('click', startGame);
-
-function GameOver(){
-    clearInterval(timer);
-    clearInterval(beatTracker);
-    player.isAllowedToMove = false
-    gameMusic.pause()
-    console.log('Game Over!')
-}
-
-let beatTracker;
-
-function trackBeats() {
-    beatTracker = setInterval(() => {
-        lastBeatTime = Date.now();
-    }, BEAT_INTERVAL);
-}
+const game = new Game();
