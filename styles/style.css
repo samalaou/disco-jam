@@ -42,6 +42,33 @@ body {
     position: absolute;
 }
 
+.final-screen {
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    z-index: 10;
+    flex-direction: column;
+}
+
+#close-screen {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 30px;
+    font-weight: bold;
+}
+
 #startButton {
     margin: 10px;
+}
+
+#final-message {
+    margin-bottom: 20px;
 }

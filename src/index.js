@@ -1,5 +1,5 @@
-const NUM_OF_OBSTACLES = 5;
-const GAME_DURATION = 20;
+const NUM_OF_OBSTACLES = 20;
+const GAME_DURATION = 60;
 const BPM = 82;
 const BEAT_INTERVAL = (60 / BPM) * 1000;
 const BEAT_WINDOW = 200; // Allowable window around the beat
@@ -79,12 +79,13 @@ class Player {
     }
 
     checkCollisions() {
+        console.log(111)
         this.obstacles.forEach(obstacle => {
             if (this.isColliding(obstacle)) {
                 if (obstacle instanceof Goal){
-                    console.log("You reached the Goal!")
+                    game.handleGoalReached();
                 } else {
-                    game.gameOver();
+                    game.handleGameOver();
                 }
                 return; // Exit the function after detecting collision
             }
@@ -142,6 +143,8 @@ class Game {
         this.startButton = document.getElementById('startButton');
         this.timeDisplay = document.querySelector('#timeRemaining span');
         this.gameMusic = document.getElementById('gameMusic');
+        this.finalScreen = document.querySelector('.final-screen');
+        this.finalMessage = document.querySelector('#final-message');
 
         this.timeRemaining = GAME_DURATION;
         this.isGameActive = false;
@@ -158,6 +161,8 @@ class Game {
 
         this.startButton.addEventListener('click', () => this.startGame());
         document.addEventListener('keydown', (e) => this.handleKeyDown(e));
+        document.getElementById('close-screen').addEventListener('click', () => this.closeFinalScreen());
+        document.getElementById('restart-button').addEventListener('click', () => this.restartGame());
     }
 
     setupGame(){
@@ -196,7 +201,7 @@ class Game {
             this.timeRemaining--;
             this.updateTimeDisplay();
             if (this.timeRemaining <= 0) {
-                this.gameOver();
+                this.handleGameOver();
             }
         }, 1000);
     }
@@ -211,17 +216,6 @@ class Game {
         this.beatTracker = setInterval(() => {
             this.lastBeatTime = Date.now();
         }, BEAT_INTERVAL);
-    }
-
-    handleKeyDown(e) {
-        if (e.code === "Space"){
-            this.startGame()
-        }
-        const currentTime = Date.now();
-        const timeSinceLastBeat = currentTime - this.lastBeatTime;
-        if (timeSinceLastBeat < BEAT_WINDOW || timeSinceLastBeat > BEAT_INTERVAL - BEAT_WINDOW) {
-            this.player.handleKeyDown(e);
-        }
     }
 
     handleKeyDown(e) {
@@ -243,13 +237,43 @@ class Game {
         return timeSinceLastBeat < BEAT_WINDOW || timeSinceLastBeat > BEAT_INTERVAL - BEAT_WINDOW;
     }
 
-    gameOver() {
+    endGame() {
         clearInterval(this.timer);
         clearInterval(this.beatTracker);
         this.player.isAllowedToMove = false;
         this.gameMusic.pause();
         this.isGameActive = false;
-        console.log('Game Over!');
+        this.finalScreen.style.display = 'flex'; 
+    }
+
+    closeFinalScreen() {
+        this.finalScreen.style.display = 'none';
+    }
+
+    restartGame() {
+        this.timeRemaining = GAME_DURATION;
+        this.closeFinalScreen()
+        this.clearGame();
+        this.setupGame();
+        this.startGame();
+    }
+
+    clearGame() {
+        this.obstacles.forEach(obstacle => obstacle.element.remove());
+        this.player.element.remove();
+        this.obstacles = [];
+        this.player = null;
+        this.goal = null;
+    }
+
+    handleGameOver(){
+        this.endGame()
+        this.finalMessage.textContent = 'You lost'
+    }
+
+    handleGoalReached(){
+        this.endGame()
+        this.finalMessage.textContent = 'You won!'
     }
 }
 
