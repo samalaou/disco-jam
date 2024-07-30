@@ -94,32 +94,6 @@ class Player {
 
 }
 
-
-class Obstacles {
-    constructor(container, numObstacles) {
-        this.container = container;
-        this.numObstacles = numObstacles;
-        this.obstacles = [];
-        this.updateContainerDimensions();
-
-        this.createObstacles();
-    }
-
-    updateContainerDimensions() {
-        const containerRect = this.container.getBoundingClientRect();
-        this.containerWidthVW = containerRect.width / window.innerWidth * 100; // Convert to vw
-        this.containerHeightVH = containerRect.height / window.innerHeight * 100; // Convert to vh
-    }
-
-    createObstacles() {
-        for (let i = 0; i < this.numObstacles; i++) {
-            const obstacle = new Obstacle(this.container, this.containerWidthVW, this.containerHeightVH);
-            this.obstacles.push(obstacle);
-        }
-    }
-}
-
-
 class Obstacle {
     constructor(container, containerWidthVW, containerHeightVH) {
         this.container = container;
@@ -173,18 +147,37 @@ class Game {
         this.isGameActive = false;
         this.timer = null;
         this.player = null;
-        this.obstacles = null;
+        this.obstacles = [];
         this.goal = null;
         this.beatTracker = null;
         this.lastBeatTime = 0;
-
-        this.obstacles = new Obstacles(this.container, NUM_OF_OBSTACLES);
-        this.goal = new Goal(this.container, this.obstacles.containerWidthVW, this.obstacles.containerHeightVH);
-        this.obstacles.obstacles.push(this.goal);
-        this.player = new Player(this.container, this.obstacles.obstacles);
+        this.containerHeightVH = null;
+        this.containerWidthVW = null;
+    
+        this.setupGame();
 
         this.startButton.addEventListener('click', () => this.startGame());
         document.addEventListener('keydown', (e) => this.handleKeyDown(e));
+    }
+
+    setupGame(){
+        const containerRect = this.container.getBoundingClientRect();
+        this.containerWidthVW = containerRect.width / window.innerWidth * 100; // Convert to vw
+        this.containerHeightVH = containerRect.height / window.innerHeight * 100; // Convert to vh
+
+        this.createObstacles()
+
+        this.goal = new Goal(this.container, this.containerWidthVW, this.containerHeightVH);
+        this.obstacles.push(this.goal);
+        this.player = new Player(this.container, this.obstacles);
+
+    }
+
+    createObstacles() {
+        for (let i = 0; i < NUM_OF_OBSTACLES; i++) {
+            const obstacle = new Obstacle(this.container, this.containerWidthVW, this.containerHeightVH);
+            this.obstacles.push(obstacle);
+        }
     }
 
     startGame() {
