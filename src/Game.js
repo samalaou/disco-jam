@@ -4,12 +4,14 @@ class Game {
         this.startButton = document.getElementById('startButton');
         this.timeDisplay = document.querySelector('#timeRemaining span');
         this.gameMusic = document.getElementById('gameMusic');
-        this.finalScreen = document.querySelector('.final-screen');
+        this.optionScreen = document.querySelector('.option-screen');
         this.finalMessage = document.querySelector('#final-message');
 
         this.directionKeys = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
         this.timeRemaining = GAME_DURATION;
         this.isGameActive = false;
+        this.isFinalScreen = false;
+        this.isPaused = false;
         this.timer = null;
         this.player = null;
         this.obstacles = [];
@@ -23,22 +25,20 @@ class Game {
 
         this.startButton.addEventListener('click', () => this.startGame());
         document.addEventListener('keydown', (e) => this.handleKeyDown(e));
-        document.getElementById('close-screen').addEventListener('click', () => this.closeFinalScreen());
+        document.getElementById('close-screen').addEventListener('click', () => this.closeOptionScreen());
         document.querySelectorAll('.restart-button').forEach(button => {
             button.addEventListener('click', () => this.restartGame());
         });
-        
     }
 
     setupGame(){
         [this.containerWidthVW, this.containerHeightVH] = getParentDimensions(this.container);
 
-        this.createObstacles()
+        this.createObstacles();
 
         this.goal = new Goal(this.container, this.containerWidthVW, this.containerHeightVH);
         this.obstacles.push(this.goal);
         this.player = new Player(this.container, this.obstacles);
-
     }
 
     createObstacles() {
@@ -84,32 +84,32 @@ class Game {
     handleKeyDown(e) {
         if (e.code === "Space") {
             this.handleSpace();
+            return;
         }
 
         if (!this.isGameActive || !this.player.isAllowedToMove) {
             return;
         }
-    
+
         if (this.directionKeys.includes(e.code)) {
             if (this.isWithinBeatWindow()) {
                 this.player.handleKeyDown(e);
             } else {
                 this.applyMissedBeatPenalty();
             }
-        } 
+        }
     }
-    
-    handleSpace(){
-        if (this.isGameActive) {
-            if (this.timer) {
-                this.pauseGame();
-            } else {
-                this.resumeGame();
-            }
+
+    handleSpace() {
+        if (this.isFinalScreen) {
+            this.restartGame();
+        } else if (this.isPaused) {
+            this.resumeGame();
+        } else if (this.isGameActive) {
+            this.pauseGame();
         } else {
             this.startGame();
         }
-        return;
     }
 
     isWithinBeatWindow() {
@@ -136,17 +136,19 @@ class Game {
         this.player.isAllowedToMove = false;
         this.gameMusic.pause();
         this.isGameActive = false;
-        this.finalScreen.style.display = 'flex'; 
+        this.isFinalScreen = true;
+        this.optionScreen.style.display = 'flex';
     }
 
-    closeFinalScreen() {
-        this.finalScreen.style.display = 'none';
+    closeOptionScreen() {
+        this.optionScreen.style.display = 'none';
     }
 
     restartGame() {
         this.timeRemaining = GAME_DURATION;
         this.gameMusic.currentTime = 0;
-        this.closeFinalScreen()
+        this.isFinalScreen = false;
+        this.closeOptionScreen();
         this.clearGame();
         this.setupGame();
         this.startGame();
@@ -160,27 +162,30 @@ class Game {
         this.goal = null;
     }
 
-    handleGameOver(){
-        this.endGame()
-        this.finalMessage.textContent = 'You lost'
+    handleGameOver() {
+        this.endGame();
+        this.finalMessage.textContent = 'You lost';
     }
 
-    handleGoalReached(){
-        this.endGame()
-        this.finalMessage.textContent = 'You won!'
+    handleGoalReached() {
+        this.endGame();
+        this.finalMessage.textContent = 'You won!';
     }
 
     pauseGame() {
-        this.isGameActive = false;
+        this.isPaused = true;
         clearInterval(this.timer);
         clearInterval(this.beatTracker);
         this.gameMusic.pause();
+        this.optionScreen.style.display = 'flex';
+        this.finalMessage.textContent = 'Game Paused';
     }
-    
+
     resumeGame() {
-        this.isGameActive = true;
+        this.isPaused = false;
         this.startTimer();
         this.trackBeats();
         this.gameMusic.play();
+        this.closeOptionScreen();
     }
 }
