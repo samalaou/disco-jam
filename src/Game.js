@@ -7,6 +7,7 @@ class Game {
         this.optionScreen = document.querySelector('.option-screen');
         this.finalMessage = document.querySelector('#final-message');
         this.restartButton = document.getElementById('option-restart-btn');
+        this.mainRestartBurron = document.getElementById('main-restart-btn');
 
         this.directionKeys = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
         this.timeRemaining = GAME_DURATION;
@@ -22,18 +23,19 @@ class Game {
         this.lastBeatTime = 0;
         this.containerHeightVH = null;
         this.containerWidthVW = null;
-    
+        
         this.setupGame();
 
         this.startButton.addEventListener('click', () => this.startGame());
         document.addEventListener('keydown', (e) => this.handleKeyDown(e));
         document.getElementById('close-screen').addEventListener('click', () => this.closeOptionScreen());
-        document.querySelectorAll('.restart-button').forEach(button => {
-            button.addEventListener('click', () => this.restartGame());
-        });
+        this.restartButton.addEventListener('click', () => this.restartGame());
+        this.mainRestartBurron.addEventListener('click', () => this.restartGame());
+
+        this.mainRestartBurron.disabled = true;
     }
 
-    setupGame(){
+    setupGame() {
         this.updateButtonVisibility();
 
         [this.containerWidthVW, this.containerHeightVH] = getParentDimensions(this.container);
@@ -63,6 +65,7 @@ class Game {
         this.trackBeats();
         this.closeOptionScreen();
         this.updateButtonVisibility();
+        this.mainRestartBurron.disabled = false; // Enable the restart button in game options
     }
 
     startTimer() {
@@ -147,6 +150,7 @@ class Game {
         this.isFinalScreen = true;
         this.optionScreen.style.display = 'flex';
         this.updateButtonVisibility();
+        this.mainRestartBurron.disabled = false; // Enable the restart button in game options
     }
 
     closeOptionScreen() {
@@ -198,7 +202,7 @@ class Game {
         this.trackBeats();
         this.gameMusic.play();
         this.closeOptionScreen();
-        this.updateButtonVisibility(); 
+        this.updateButtonVisibility();
     }
 
     updateButtonVisibility() {
