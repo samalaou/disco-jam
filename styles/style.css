@@ -16,6 +16,31 @@ h1 {
     color: white;
 }
 
+button {
+    position: relative;
+    background-color: transparent;
+    border: none;
+    cursor: pointer; 
+    padding: 0;
+    border-radius: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+button img {
+    width: 30%;
+    object-fit: cover;
+    border-radius: inherit;
+}
+
+#game-options {
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
 .game-container {
     width: 80vw;
     height: 80vh;
@@ -91,7 +116,7 @@ h1 {
     height: 50%;
     background-color: rgba(207, 11, 184, 0.37);
     color: white;
-    display: none;
+    display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;

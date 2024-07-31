@@ -6,6 +6,7 @@ class Game {
         this.gameMusic = document.getElementById('gameMusic');
         this.optionScreen = document.querySelector('.option-screen');
         this.finalMessage = document.querySelector('#final-message');
+        this.restartButton = document.getElementById('option-restart-btn');
 
         this.directionKeys = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
         this.timeRemaining = GAME_DURATION;
@@ -32,6 +33,8 @@ class Game {
     }
 
     setupGame(){
+        this.updateButtonVisibility();
+
         [this.containerWidthVW, this.containerHeightVH] = getParentDimensions(this.container);
 
         this.createObstacles();
@@ -56,6 +59,7 @@ class Game {
         this.gameMusic.play();
         this.startTimer();
         this.trackBeats();
+        this.closeOptionScreen();
     }
 
     startTimer() {
@@ -138,6 +142,7 @@ class Game {
         this.isGameActive = false;
         this.isFinalScreen = true;
         this.optionScreen.style.display = 'flex';
+        this.updateButtonVisibility();
     }
 
     closeOptionScreen() {
@@ -179,6 +184,7 @@ class Game {
         this.gameMusic.pause();
         this.optionScreen.style.display = 'flex';
         this.finalMessage.textContent = 'Game Paused';
+        this.updateButtonVisibility();
     }
 
     resumeGame() {
@@ -187,5 +193,16 @@ class Game {
         this.trackBeats();
         this.gameMusic.play();
         this.closeOptionScreen();
+        this.updateButtonVisibility();
+    }
+
+    updateButtonVisibility(){
+        if (this.isGameActive) {
+            this.startButton.style.display = 'none';
+            this.restartButton.style.display = 'block';
+        } else {
+            this.startButton.style.display = 'block';
+            this.restartButton.style.display = 'none';
+        }
     }
 }
