@@ -13,6 +13,7 @@ class Game {
         this.isGameActive = false;
         this.isFinalScreen = false;
         this.isPaused = false;
+        this.isGameOver = false;
         this.timer = null;
         this.player = null;
         this.obstacles = [];
@@ -55,11 +56,13 @@ class Game {
         if (this.isGameActive) return;
 
         this.isGameActive = true;
+        this.isGameOver = false;
         this.player.isAllowedToMove = true;
         this.gameMusic.play();
         this.startTimer();
         this.trackBeats();
         this.closeOptionScreen();
+        this.updateButtonVisibility();
     }
 
     startTimer() {
@@ -140,6 +143,7 @@ class Game {
         this.player.isAllowedToMove = false;
         this.gameMusic.pause();
         this.isGameActive = false;
+        this.isGameOver = true;
         this.isFinalScreen = true;
         this.optionScreen.style.display = 'flex';
         this.updateButtonVisibility();
@@ -153,6 +157,7 @@ class Game {
         this.timeRemaining = GAME_DURATION;
         this.gameMusic.currentTime = 0;
         this.isFinalScreen = false;
+        this.isGameOver = false;
         this.closeOptionScreen();
         this.clearGame();
         this.setupGame();
@@ -193,11 +198,11 @@ class Game {
         this.trackBeats();
         this.gameMusic.play();
         this.closeOptionScreen();
-        this.updateButtonVisibility();
+        this.updateButtonVisibility(); 
     }
 
-    updateButtonVisibility(){
-        if (this.isGameActive) {
+    updateButtonVisibility() {
+        if (this.isGameOver || this.isPaused) {
             this.startButton.style.display = 'none';
             this.restartButton.style.display = 'block';
         } else {
