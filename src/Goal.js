@@ -7,8 +7,6 @@ class Goal extends Obstacle {
 
         this.createDomElement();
 
-        this.element.style.backgroundColor = 'red';
         this.element.id = "goal";
-
     }
 }

@@ -4,7 +4,7 @@ class Player {
         this.container = container;
         this.obstacles = obstacles;
         this.widthVW = DEFAULT_WIDTH;
-        this.heightVH = DEFAULT_HIEGHT;
+        this.heightVH = PLAYER_HIEGHT;
         this.isAllowedToMove = false;
         this.containerWidthVW = null;
         this.containerHeightVH = null;

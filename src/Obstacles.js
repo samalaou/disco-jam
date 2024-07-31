@@ -4,7 +4,7 @@ class Obstacle {
         this.containerWidthVW = containerWidthVW;
         this.containerHeightVH = containerHeightVH;
         this.widthVW = DEFAULT_WIDTH;
-        this.heightVH = DEFAULT_HIEGHT;
+        this.heightVH = OBSTACLES_HIEGHT;
         this.positionXVW = Math.floor(Math.random() * (this.containerWidthVW - this.widthVW));
         this.positionYVH = Math.floor(Math.random() * (this.containerHeightVH - this.heightVH));
 

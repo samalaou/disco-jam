@@ -35,18 +35,20 @@ h1 {
     background-color: black; 
 }
 
-.player {
-    background-color: #00f;
-    position: absolute;
-}
-
 .obstacle {
+    background-image: url('../images/obstacle.png');
     position: absolute;
-    background-color: green;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
-.goal {
+.player  {
+    background-image: url('../images/player.png');
     position: absolute;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .final-screen {
@@ -83,4 +85,16 @@ h1 {
 #timeRemaining {
     color: white;
     font-weight: bold;
+}
+
+#title {
+    display: flex;
+    height: 20%;
+    width: 25%;
+    padding: 10px;
+
+}
+
+#goal {
+    background-image: url('../images/goal.png');
 }
