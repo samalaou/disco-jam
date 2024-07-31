@@ -80,13 +80,13 @@ class Game {
 
     handleKeyDown(e) {
         if (e.code === "Space") {
-            this.startGame();
-            return;
+            this.handleSpace();
         }
+
         if (!this.isGameActive || !this.player.isAllowedToMove) {
             return;
         }
-
+    
         if (this.directionKeys.includes(e.code)) {
             if (this.isWithinBeatWindow()) {
                 this.player.handleKeyDown(e);
@@ -94,6 +94,19 @@ class Game {
                 this.applyMissedBeatPenalty();
             }
         } 
+    }
+    
+    handleSpace(){
+        if (this.isGameActive) {
+            if (this.timer) {
+                this.pauseGame();
+            } else {
+                this.resumeGame();
+            }
+        } else {
+            this.startGame();
+        }
+        return;
     }
 
     isWithinBeatWindow() {
@@ -152,5 +165,19 @@ class Game {
     handleGoalReached(){
         this.endGame()
         this.finalMessage.textContent = 'You won!'
+    }
+
+    pauseGame() {
+        this.isGameActive = false;
+        clearInterval(this.timer);
+        clearInterval(this.beatTracker);
+        this.gameMusic.pause();
+    }
+    
+    resumeGame() {
+        this.isGameActive = true;
+        this.startTimer();
+        this.trackBeats();
+        this.gameMusic.play();
     }
 }
