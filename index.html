@@ -9,18 +9,25 @@
 <body>
     <audio id="gameMusic" src="./music/8_Bit_Retro_Funk_Cut.mp3"></audio>
     <div class="game-container">
-        <img id="title" src="./images/disco_jam.png" alt="Disco Jam">
+        <div class="header">
+            <img id="title" src="./images/disco_jam.png" alt="Disco Jam">
+            <div id="timeRemaining">
+                REMAINING TIME:
+                <br>
+                <span>00:00</span>
+            </div>
+        </div>
         <div class="container">
+
+            <div class="final-screen">
+                <span id="close-screen">x</span>
+                <p id="final-message"></p>
+                <button class="restart-button">Restart</button>
+            </div>
         </div>
         <div id="game-options">
+            <button class="restart-button">Restart</button>
             <button id="startButton">Start Game</button>
-            <div id="timeRemaining">Remaining Time: <span>00:00</span></div>
-        </div>
-
-        <div class="final-screen">
-            <span id="close-screen">x</span>
-            <p id="final-message"></p>
-            <button id="restart-button">Restart</button>
         </div>
     </div>
     <script src="./src/utils.js"></script>

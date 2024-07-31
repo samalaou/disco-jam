@@ -24,7 +24,10 @@ class Game {
         this.startButton.addEventListener('click', () => this.startGame());
         document.addEventListener('keydown', (e) => this.handleKeyDown(e));
         document.getElementById('close-screen').addEventListener('click', () => this.closeFinalScreen());
-        document.getElementById('restart-button').addEventListener('click', () => this.restartGame());
+        document.querySelectorAll('.restart-button').forEach(button => {
+            button.addEventListener('click', () => this.restartGame());
+        });
+        
     }
 
     setupGame(){

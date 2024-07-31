@@ -27,13 +27,44 @@ h1 {
     box-sizing: border-box;
 }
 
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 150px;
+    position: relative;
+}
+
+#title {
+    height: 100%;
+    width: auto;
+    margin: 0 auto;
+}
+
+
+#timeRemaining {
+    color: white;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+#timeRemaining span {
+    font-size: 24px;
+    margin-top: 5px;
+}
+
 .container {
     position: relative;
     width: 100%;
     height: 100%;
     border: 2px solid white;
-    background-color: black; 
+    background-color: black;
 }
+
 
 .obstacle {
     background-image: url('../images/obstacle.png');
@@ -43,7 +74,7 @@ h1 {
     background-position: center;
 }
 
-.player  {
+.player {
     background-image: url('../images/player.png');
     position: absolute;
     background-size: cover;
@@ -53,6 +84,9 @@ h1 {
 
 .final-screen {
     position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     width: 50%;
     height: 50%;
     background-color: rgba(207, 11, 184, 0.37);
@@ -80,19 +114,6 @@ h1 {
 
 #final-message {
     margin-bottom: 20px;
-}
-
-#timeRemaining {
-    color: white;
-    font-weight: bold;
-}
-
-#title {
-    display: flex;
-    height: 20%;
-    width: 25%;
-    padding: 10px;
-
 }
 
 #goal {
