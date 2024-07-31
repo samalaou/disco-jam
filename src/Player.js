@@ -3,11 +3,11 @@ class Player {
         this.position = { x: 0, y: 0 };
         this.container = container;
         this.obstacles = obstacles;
+        this.widthVW = DEFAULT_WIDTH;
+        this.heightVH = DEFAULT_HIEGHT;
         this.isAllowedToMove = false;
         this.containerWidthVW = null;
         this.containerHeightVH = null;
-        this.playerWidthVW = null;
-        this.playerHeightVH = null;
         this.createDomElement();
         this.updateDimensions();
     
@@ -23,16 +23,14 @@ class Player {
         const containerRect = this.container.getBoundingClientRect();
         this.containerWidthVW = containerRect.width / window.innerWidth * 100; // Convert to vw
         this.containerHeightVH = containerRect.height / window.innerHeight * 100; // Convert to vh
-
-        const playerRect = this.element.getBoundingClientRect();
-        this.playerWidthVW = playerRect.width / window.innerWidth * 100; // Convert to vw
-        this.playerHeightVH = playerRect.height / window.innerHeight * 100; // Convert to vh
     }
 
     createDomElement() {
         this.element = document.createElement('div');
         this.element.classList.add('player');
         this.container.appendChild(this.element);
+        this.element.style.width = `${this.widthVW}vw`;
+        this.element.style.height = `${this.heightVH}vh`;
     }
 
     move(dx, dy) {
@@ -40,8 +38,8 @@ class Player {
         const newY = this.position.y + dy;
 
         // Ensure the player stays within the container
-        const withinBoundsX = newX >= 0 && newX + this.playerWidthVW <= this.containerWidthVW;
-        const withinBoundsY = newY >= 0 && newY + this.playerHeightVH <= this.containerHeightVH;
+        const withinBoundsX = newX >= 0 && newX + this.widthVW <= this.containerWidthVW;
+        const withinBoundsY = newY >= 0 && newY + this.heightVH <= this.containerHeightVH;
 
         if (withinBoundsX && withinBoundsY) {
             this.position.x = newX;

@@ -29,8 +29,6 @@ body {
 .player {
     background-color: #00f;
     position: absolute;
-    width: 50px; /* Set a fixed size for the player for now */
-    height: 50px; /* Set a fixed size for the player for now */
 }
 
 .obstacle {
