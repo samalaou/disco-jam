@@ -34,7 +34,6 @@ class Player {
     move(dx, dy) {
         const newX = this.position.x + dx;
         const newY = this.position.y + dy;
-
         // Ensure the player stays within the container
         const withinBoundsX = newX >= 0 && newX + this.widthVW <= this.containerWidthVW;
         const withinBoundsY = newY >= 0 && newY + this.heightVH <= this.containerHeightVH;
@@ -62,9 +61,9 @@ class Player {
     isColliding(obstacle) {
         return (
             this.position.x < obstacle.positionXVW + obstacle.widthVW &&
-            this.position.x + this.playerWidthVW > obstacle.positionXVW &&
+            this.position.x + this.widthVW > obstacle.positionXVW &&
             this.position.y < obstacle.positionYVH + obstacle.heightVH &&
-            this.position.y + this.playerHeightVH > obstacle.positionYVH
+            this.position.y + this.heightVH > obstacle.positionYVH
         );
     }
 
