@@ -20,9 +20,7 @@ class Player {
     }
 
     updateDimensions() {
-        const containerRect = this.container.getBoundingClientRect();
-        this.containerWidthVW = containerRect.width / window.innerWidth * 100; // Convert to vw
-        this.containerHeightVH = containerRect.height / window.innerHeight * 100; // Convert to vh
+        [this.containerWidthVW, this.containerHeightVH] = getParentDimensions(this.container);
     }
 
     createDomElement() {
