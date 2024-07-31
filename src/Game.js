@@ -129,6 +129,7 @@ class Game {
 
     restartGame() {
         this.timeRemaining = GAME_DURATION;
+        this.gameMusic.currentTime = 0;
         this.closeFinalScreen()
         this.clearGame();
         this.setupGame();
