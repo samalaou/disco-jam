@@ -1,10 +1,12 @@
 class Player {
     constructor(container, obstacles) {
-        this.position = { x: 0, y: 0 };
+        this.position = {...PLAYER_STARTING_POSITON};
         this.container = container;
         this.obstacles = obstacles;
-        this.widthVW = DEFAULT_WIDTH;
-        this.heightVH = PLAYER_HIEGHT;
+        this.dimension = {
+            width: DEFAULT_WIDTH,
+            height: PLAYER_HIEGHT
+        };
         this.isAllowedToMove = false;
         this.containerWidthVW = null;
         this.containerHeightVH = null;
@@ -27,16 +29,15 @@ class Player {
         this.element = document.createElement('div');
         this.element.classList.add('player');
         this.container.appendChild(this.element);
-        this.element.style.width = `${this.widthVW}vw`;
-        this.element.style.height = `${this.heightVH}vh`;
+        this.element.style.width = `${this.dimension.width}vw`;
+        this.element.style.height = `${this.dimension.height}vh`;
     }
 
     move(dx, dy) {
         const newX = this.position.x + dx;
         const newY = this.position.y + dy;
-        // Ensure the player stays within the container
-        const withinBoundsX = newX >= 0 && newX + this.widthVW <= this.containerWidthVW;
-        const withinBoundsY = newY >= 0 && newY + this.heightVH <= this.containerHeightVH;
+        const withinBoundsX = newX >= 0 && newX + this.dimension.width <= this.containerWidthVW;
+        const withinBoundsY = newY >= 0 && newY + this.dimension.height <= this.containerHeightVH;
 
         if (withinBoundsX && withinBoundsY) {
             this.position.x = newX;
@@ -58,19 +59,10 @@ class Player {
         }
     }
 
-    isColliding(obstacle) {
-        return (
-            this.position.x < obstacle.positionXVW + obstacle.widthVW &&
-            this.position.x + this.widthVW > obstacle.positionXVW &&
-            this.position.y < obstacle.positionYVH + obstacle.heightVH &&
-            this.position.y + this.heightVH > obstacle.positionYVH
-        );
-    }
-
     checkCollisions() {
         this.obstacles.forEach(obstacle => {
-            if (this.isColliding(obstacle)) {
-                if (obstacle instanceof Goal){
+            if (isOverlapping(this.position, this.dimension, obstacle.position, obstacle.dimension)) {
+                if (obstacle instanceof Goal) {
                     game.handleGoalReached();
                 } else {
                     game.handleGameOver();
@@ -79,5 +71,4 @@ class Player {
             }
         });
     }
-
 }

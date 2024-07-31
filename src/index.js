@@ -7,5 +7,10 @@ const MISSED_BEAT_PENALTY = 5;
 const DEFAULT_WIDTH = 3;
 const OBSTACLES_HIEGHT = 6;
 const PLAYER_HIEGHT = 9;
+const PLAYER_DIMENSION = {
+    width: DEFAULT_WIDTH,
+    height: PLAYER_HIEGHT
+}
+const PLAYER_STARTING_POSITON = { x: 0, y: 0 };
 
 const game = new Game();
