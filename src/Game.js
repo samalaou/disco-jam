@@ -43,10 +43,15 @@ class Game {
     }
 
     createObstacles() {
-        for (let i = 0; i < NUM_OF_OBSTACLES; i++) {
+        for (let i = 0; i < NUM_STATIC_OBSTACLES; i++) {
             const obstacle = new Obstacle(this.container, this.containerWidthVW, this.containerHeightVH);
             this.obstacles.push(obstacle);
         }
+        for (let i = 0; i < NUM_MOVING_OBSTACLES; i++) {
+            const movingObstacle = new MovingObstacle(this.container, this.containerWidthVW, this.containerHeightVH);
+            this.obstacles.push(movingObstacle);
+        }
+
     }
 
     startGame() {
@@ -156,6 +161,7 @@ class Game {
         this.isFinalScreen = true;
         this.optionScreen.style.display = 'flex';
         this.updateButtonVisibility();
+        this.stopMovingObstacles();
     }
 
     closeOptionScreen() {
@@ -222,4 +228,11 @@ class Game {
             this.restartButton.style.display = 'none';
         }
     }
+
+    stopMovingObstacles() {
+        this.obstacles
+            .filter(obstacle => obstacle instanceof MovingObstacle)
+            .forEach(obstacle => obstacle.stopMoving());
+    }
+    
 }

@@ -13,3 +13,8 @@ function isOverlapping(positionA, dimensionA, positionB, dimensionB) {
         positionA.y + dimensionA.height > positionB.y
     );
 }
+
+function updatePosition(element, position) {
+    element.style.left = `${position.x}vw`;
+    element.style.top = `${position.y}vh`;
+}

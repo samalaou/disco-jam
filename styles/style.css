@@ -105,6 +105,11 @@ button img {
     background-position: center;
 }
 
+.moving-obstacle {
+    background-image: url('../images/moving_obstacle.png');
+
+}
+
 .player {
     background-image: url('../images/player.png');
     position: absolute;

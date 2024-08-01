@@ -42,14 +42,9 @@ class Player {
         if (withinBoundsX && withinBoundsY) {
             this.position.x = newX;
             this.position.y = newY;
-            this.updatePosition();
+            updatePosition(this.element, this.position);
             this.checkCollisions();
         }
-    }
-
-    updatePosition() {
-        this.element.style.left = `${this.position.x}vw`;
-        this.element.style.top = `${this.position.y}vh`;
     }
 
     handleKeyDown(e) {
