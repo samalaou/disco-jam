@@ -7,7 +7,6 @@ class Game {
         this.optionScreen = document.querySelector('.option-screen');
         this.finalMessage = document.querySelector('#final-message');
         this.restartButton = document.getElementById('option-restart-btn');
-        this.mainRestartBurron = document.getElementById('main-restart-btn');
 
         this.directionKeys = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
         this.timeRemaining = GAME_DURATION;
@@ -29,9 +28,7 @@ class Game {
         this.startButton.addEventListener('click', () => this.startGame());
         document.addEventListener('keydown', (e) => this.handleKeyDown(e));
         this.restartButton.addEventListener('click', () => this.restartGame());
-        this.mainRestartBurron.addEventListener('click', () => this.restartGame());
 
-        this.mainRestartBurron.disabled = true;
     }
 
     setupGame() {
@@ -64,7 +61,6 @@ class Game {
         this.trackBeats();
         this.closeOptionScreen();
         this.updateButtonVisibility();
-        this.mainRestartBurron.disabled = false; // Enable the restart button in game options
     }
 
     startTimer() {
@@ -149,7 +145,6 @@ class Game {
         this.isFinalScreen = true;
         this.optionScreen.style.display = 'flex';
         this.updateButtonVisibility();
-        this.mainRestartBurron.disabled = false; // Enable the restart button in game options
     }
 
     closeOptionScreen() {
