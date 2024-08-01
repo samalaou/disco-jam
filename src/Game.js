@@ -28,7 +28,6 @@ class Game {
         this.startButton.addEventListener('click', () => this.startGame());
         document.addEventListener('keydown', (e) => this.handleKeyDown(e));
         this.restartButton.addEventListener('click', () => this.restartGame());
-
     }
 
     setupGame() {

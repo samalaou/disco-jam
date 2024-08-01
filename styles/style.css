@@ -16,6 +16,11 @@ h1 {
     color: white;
 }
 
+p {
+    color:white;
+    font-weight: bold;
+}
+
 button {
     position: relative;
     background-color: transparent;
