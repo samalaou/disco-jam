@@ -15,4 +15,14 @@ const PLAYER_DIMENSION = {
 }
 const PLAYER_STARTING_POSITON = { x: 0, y: 0 };
 
+const titleText = "Disco Jam";
+const instructionsText = `
+    You're in the Roller Disco, but oh no! You need to pee! Get to the bathroom quickly before an accident happens, but jam along with the beat - otherwise you'll lose ${MISSED_BEAT_PENALTY} seconds! Unfortunately, the Roller Disco is haunted... Beware of the ghosts, they will make you pee yourself
+    <br>
+    ARROW KEYS: Move left, right, up and down
+    <br>
+    SPACE: Start and pause the game
+`;
+
+
 const game = new Game();

@@ -5,7 +5,8 @@ class Game {
         this.timeDisplay = document.querySelector('#timeRemaining span');
         this.gameMusic = document.getElementById('gameMusic');
         this.optionScreen = document.querySelector('.option-screen');
-        this.finalMessage = document.querySelector('#final-message');
+        this.MessageTitle = document.querySelector('.message-title');
+        this.MessageContent = document.querySelector('.message-content');
         this.restartButton = document.getElementById('option-restart-btn');
 
         this.directionKeys = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
@@ -40,6 +41,8 @@ class Game {
         this.goal = new Goal(this.container, this.containerWidthVW, this.containerHeightVH);
         this.obstacles.push(this.goal);
         this.player = new Player(this.container, this.obstacles);
+        this.MessageTitle.innerHTML = titleText;
+        this.MessageContent.innerHTML = instructionsText;
     }
 
     createObstacles() {
@@ -189,12 +192,14 @@ class Game {
 
     handleGameOver() {
         this.endGame();
-        this.finalMessage.textContent = 'You lost';
+        this.MessageTitle.innerHTML = 'You lost';
+        this.MessageContent.innerHTML = 'Try again!';
     }
 
     handleGoalReached() {
         this.endGame();
-        this.finalMessage.textContent = 'You won!';
+        this.MessageTitle.innerHTML = 'You won!';
+        this.MessageContent.innerHTML = 'Yay!';
     }
 
     pauseGame() {
@@ -203,7 +208,9 @@ class Game {
         clearInterval(this.beatTracker);
         this.gameMusic.pause();
         this.optionScreen.style.display = 'flex';
-        this.finalMessage.textContent = 'Game Paused';
+
+        this.MessageTitle.innerHTML = 'Game Paused';
+        this.MessageContent.innerHTML = 'PRESS SPACE TO RESUME GAME';
         this.updateButtonVisibility();
     }
 

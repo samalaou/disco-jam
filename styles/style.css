@@ -21,6 +21,10 @@ p {
     font-weight: bold;
 }
 
+br {
+    margin-bottom: 10px;
+}
+
 button {
     position: relative;
     background-color: transparent;
@@ -140,9 +144,9 @@ button img {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 50%;
-    height: 50%;
-    background-color: rgba(207, 11, 184, 0.37);
+    width: 60%;
+    height: 80%;
+    background-color: rgba(207, 11, 184, 0.767);
     color: white;
     display: flex;
     align-items: center;
@@ -153,11 +157,28 @@ button img {
 }
 
 #startButton {
-    margin: 10px;
+    margin-bottom: 20px;
 }
 
 #final-message {
     margin-bottom: 20px;
+    text-align: center; 
+}
+
+#final-message .message-title {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 10px;
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+#final-message .message-content {
+    text-align: left;
+    display: inline-block;
+    font-weight: bold;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 #goal {
