@@ -14,10 +14,10 @@ class Player {
         this.updateDimensions();
     
         this.directions = {
-            'ArrowUp': () => this.move(0, -1),
-            'ArrowDown': () => this.move(0, 1),
-            'ArrowLeft': () => this.move(-1, 0),
-            'ArrowRight': () => this.move(1, 0)
+            'ArrowUp': () => this.move(0, -2),
+            'ArrowDown': () => this.move(0, 2),
+            'ArrowLeft': () => this.move(-2, 0),
+            'ArrowRight': () => this.move(2, 0)
         };
     }
 
