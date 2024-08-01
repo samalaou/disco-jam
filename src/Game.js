@@ -129,11 +129,23 @@ class Game {
         }
         this.updateTimeDisplay();
 
+        this.showMissedBeat();
+
         if (this.timeRemaining <= 0) {
             this.handleGameOver();
         }
     }
 
+    showMissedBeat() {
+        this.timeDisplay.style.color = 'red';
+        this.player.element.classList.add('missed-beat');
+    
+        setTimeout(() => {
+            this.timeDisplay.style.color = 'white';
+            this.player.element.classList.remove('missed-beat');
+        }, 1000);
+    }
+    
     endGame() {
         clearInterval(this.timer);
         clearInterval(this.beatTracker);

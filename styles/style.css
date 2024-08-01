@@ -111,6 +111,23 @@ button img {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
+    transition: left 0.1s, top 0.1s;
+    border-radius: 10px;
+}
+
+@keyframes missed-beat {
+    0%, 100% { box-shadow: 0 0 10px 5px red; }
+    50% { box-shadow: 0 0 0 0 red; }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.missed-beat {
+    animation: missed-beat 1s ease, shake 0.5s;
 }
 
 .option-screen {
