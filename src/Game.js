@@ -205,9 +205,12 @@ class Game {
     }
 
     updateButtonVisibility() {
-        if (this.isGameOver || this.isPaused) {
+        if (this.isGameOver) {
             this.startButton.style.display = 'none';
             this.restartButton.style.display = 'block';
+        } else if (this.isPaused) {
+            this.startButton.style.display = 'none';
+            this.restartButton.style.display = 'none';
         } else {
             this.startButton.style.display = 'block';
             this.restartButton.style.display = 'none';
