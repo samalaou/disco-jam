@@ -125,15 +125,6 @@ button img {
     flex-direction: column;
 }
 
-#close-screen {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    cursor: pointer;
-    font-size: 30px;
-    font-weight: bold;
-}
-
 #startButton {
     margin: 10px;
 }

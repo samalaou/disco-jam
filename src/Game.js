@@ -28,7 +28,6 @@ class Game {
 
         this.startButton.addEventListener('click', () => this.startGame());
         document.addEventListener('keydown', (e) => this.handleKeyDown(e));
-        document.getElementById('close-screen').addEventListener('click', () => this.closeOptionScreen());
         this.restartButton.addEventListener('click', () => this.restartGame());
         this.mainRestartBurron.addEventListener('click', () => this.restartGame());
 
